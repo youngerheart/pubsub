@@ -1,6 +1,6 @@
 {
-  "name": "pubsub",
-  "version": "0.0.1",
+  "name": "expubsub",
+  "version": "0.0.3",
   "description": "simple pubsub for argumants and events",
   "main": "pubsub.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/youngerheart/pubsub.git"
+    "url": "git@github.com/youngerheart/pubsub.git"
   },
   "keywords": [
     "pubsub"
