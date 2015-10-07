@@ -1,14 +1,12 @@
 var gulp = require('gulp');
-var browserify = require('gulp-browserify');
-var babelify = require('babelify');
+var babel = require('gulp-babel');
 var uglify = require('gulp-uglify');
 
 
 gulp.task('deploy', function() {
   return gulp
   .src(['./pubsub.js'])
-  .pipe(browserify({
-    transform: [babelify]
-  }))
+  .pipe(babel())
+  .pipe(uglify({mangle: false}))
   .pipe(gulp.dest('dist'));
 });
