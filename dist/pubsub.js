@@ -1,1 +1,76 @@
-!function r(t,e,n){function o(u,f){if(!e[u]){if(!t[u]){var c="function"==typeof require&&require;if(!f&&c)return c(u,!0);if(i)return i(u,!0);throw new Error("Cannot find module '"+u+"'")}var p=e[u]={exports:{}};t[u][0].call(p.exports,function(r){var e=t[u][1][r];return o(e?e:r)},p,p.exports,r,t,e,n)}return e[u].exports}for(var i="function"==typeof require&&require,u=0;u<n.length;u++)o(n[u]);return o}({1:[function(r,t,e){"use strict";var n={},o={};t.exports={get:function(r){for(var t=r.split("."),e=n,o=0;o<t.length;o++)e=e[t[o]];return e},set:function(r,t){for(var e=r.split("."),o=n,i=0;i<e.length-1;i++)"object"!=typeof o[e[i]]&&(o[e[i]]={}),o=o[e[i]];o[e.pop()]=t},remove:function(r){for(var t=r.split("."),e=n,o=0;o<t.length-1;o++){if("object"!=typeof e[t[o]])return!1;e=e[t[o]]}return delete e[t.pop()]},on:function(r,t){o[r]||(o[r]=[]),o[r].forEach(function(r){}),o[r].push(t)},emit:function(r){var t=arguments;o[r]&&o[r].forEach(function(r){r.apply(null,Array.prototype.slice.call(t,1))})},exit:function(r,t){return o[r],o[r]&&o[r].length?t?void o[r].forEach(function(e,n){t===e&&(delete o[r][n],o[r].splice(n,1))}):void delete o[r]:void 0}}},{}]},{},[1]);
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+// 全局Pub/Sub
+
+'use strict';
+
+var data = {};
+var events = {};
+
+module.exports = {
+
+  // 支持对象元素:get/set('obj.item')
+  get: function get(name) {
+    var arr = name.split('.');
+    var res = data;
+    for (var i = 0; i < arr.length; i++) {
+      res = res[arr[i]];
+    }
+    return res;
+  },
+
+  set: function set(name, value) {
+    var arr = name.split('.');
+    var item = data;
+    for (var j = 0; j < arr.length - 1; j++) {
+      if (typeof item[arr[j]] !== 'object') item[arr[j]] = {};
+      item = item[arr[j]];
+    }
+    item[arr.pop()] = value;
+  },
+
+  remove: function remove(name) {
+    var arr = name.split('.');
+    var res = data;
+    for (var i = 0; i < arr.length - 1; i++) {
+      if (typeof res[arr[i]] !== 'object') return false;
+      res = res[arr[i]];
+    }
+    return delete res[arr.pop()];
+  },
+
+  // 绑定事件
+  on: function on(eventName, callback) {
+    if (!events[eventName]) events[eventName] = [];
+    events[eventName].forEach(function (item) {
+      if (item === callback) return;
+    });
+    events[eventName].push(callback);
+  },
+
+  // 触发事件(需要自己的执行域)
+  emit: function emit(eventName) {
+    var arg = arguments;
+    if (!events[eventName]) return;
+    events[eventName].forEach(function (item) {
+      item.apply(null, Array.prototype.slice.call(arg, 1));
+    });
+  },
+
+  // 根据引用注销事件,只传名称则注销该名称的所有事件，传入名称和引用则删除引用事件。
+  exit: function exit(eventName, func) {
+    events[eventName];
+    if (!events[eventName] || !events[eventName].length) return;
+    if (!func) {
+      delete events[eventName];
+      return;
+    }
+    events[eventName].forEach(function (item, i) {
+      if (func === item) {
+        delete events[eventName][i];
+        events[eventName].splice(i, 1);
+      }
+    });
+  }
+};
+
+},{}]},{},[1])

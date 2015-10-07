@@ -10,6 +10,5 @@ gulp.task('deploy', function() {
   .pipe(browserify({
     transform: [babelify]
   }))
-  .pipe(uglify())
   .pipe(gulp.dest('dist'));
 });

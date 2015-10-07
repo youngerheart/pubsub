@@ -1,6 +1,6 @@
 {
   "name": "expubsub",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "simple pubsub for argumants and events",
   "main": "dist/pubsub.js",
   "scripts": {
@@ -22,7 +22,6 @@
   "devDependencies": {
     "gulp": "^3.8.11",
     "gulp-browserify": "^0.5.1",
-    "gulp-uglify": "^1.1.0",
     "babelify": "^6.1.3"
   }
 }
